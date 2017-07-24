@@ -1,0 +1,70 @@
+﻿@model NumericSequenceCalculator.Models.Calculate
+
+@{
+    ViewBag.Title = "GetSequence";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+@*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"> </script>*@
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#loadNumbers").on("click", function () {
+
+            if($("form").valid()) {
+                var Url = "@Url.Action("_SequenceNumbers", "Calculate")";
+                var number = document.getElementById('NumberToGenerate').value;
+                var sequence = $('[name="SequenceName"]:checked').val();;
+
+                $.get("/Calculate/_SequenceNumbers/", "number=" + number + "&SequenceName=" + sequence, function (data) {
+                    $("#partialViewContainer").html(data);
+                });
+            }
+
+        });
+
+        var settngs = $.data($('form')[0], 'validator').settings;
+        settngs.onfocusout = function (element) { $(element).valid(); };
+    });
+</script>
+<br /><br />
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <fieldset id="form1">
+        <div class="editor-field">
+            <br /><label>Enter Number to generate sequence : </label>
+            @Html.TextBoxFor(model => model.NumberToGenerate, new { autofocus = true })
+            @Html.ValidationMessageFor(model => model.NumberToGenerate)
+        </div>
+        <div class="editor-field">
+            <br />
+            @Html.RadioButtonFor(model => model.SequenceName, "All", new { id = "rbAll", Checked = "checked" })
+            @Html.Label("rbAllNumbers", "All numbers")
+            @Html.RadioButtonFor(model => model.SequenceName, "Even", new { id = "rbEven" })
+            @Html.Label("rbEven", "Even numbers")
+            @Html.RadioButtonFor(model => model.SequenceName, "Odd", new { id = "rbOdd" })
+            @Html.Label("rbOdd", "Odd numbers")
+            @Html.RadioButtonFor(model => model.SequenceName, "Fibonacci", new { id = "rbFibonacci" })
+            @Html.Label("rbOdd", "Fibonacci numbers")
+            @Html.RadioButtonFor(model => model.SequenceName, "Multiples", new { id = "rbMultiples" })
+            @Html.Label("rbOdd", "Multiples")
+        </div>
+    </fieldset>
+}
+
+<br /><input type="submit" id="loadNumbers" value="GetSequence" />
+<br /><div id="partialViewContainer"></div>
+
+
+
+
+

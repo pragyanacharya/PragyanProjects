@@ -1,0 +1,11 @@
+﻿@model IEnumerable<NumericSequenceCalculator.Models.ViewModels.SequenceResult>
+
+
+<br /><br /><label>Numbers in sequence: </label>
+
+@foreach (var item in Model)
+{
+    <span>
+        @Html.DisplayFor(modelItem => item.Number)</span>
+    }
+
